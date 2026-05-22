@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>recycling_world</name>
+  <version>1.0.0</version>
+  <description>
+    Entorn de reciclatge per a TurtleBot3 en Gazebo.
+    Inclou containers de colors (blau, groc, verd, gris), parets interiors
+    i brossa dispersa. Suporta SLAM (gmapping) i localització (AMCL).
+  </description>
+
+  <maintainer email="estudiant@upc.edu">Estudiant RA Robòtica Mòbil</maintainer>
+  <license>MIT</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <depend>gazebo_ros</depend>
+  <depend>turtlebot3_description</depend>
+  <depend>turtlebot3_gazebo</depend>
+  <depend>turtlebot3_slam</depend>
+  <depend>turtlebot3_navigation</depend>
+  <depend>gmapping</depend>
+  <depend>amcl</depend>
+  <depend>map_server</depend>
+  <depend>robot_state_publisher</depend>
+  <depend>rviz</depend>
+</package>

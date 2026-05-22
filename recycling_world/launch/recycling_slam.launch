@@ -1,0 +1,75 @@
+<!--
+  LAUNCH: recycling_slam.launch
+  Inicia el procés de mapeig SLAM (gmapping) per a l'entorn de reciclatge
+  
+  ÚS (en terminals separades):
+    T1: roscore
+    T2: roslaunch recycling_world recycling_world.launch
+    T3: roslaunch recycling_world recycling_slam.launch
+    T4: rosrun rviz rviz -d $(find recycling_world)/rviz/slam.rviz
+    T5: roslaunch turtlebot3_teleop turtlebot3_teleop_key.launch
+  
+  Quan el mapa sigui prou bo:
+    rosrun map_server map_saver -f ~/catkin_ws/src/recycling_world/maps/recycling_map
+-->
+<launch>
+  <!-- Paràmetres del node slam_gmapping -->
+  <!-- 
+    Paràmetres clau per a un entorn 10x10 m:
+    - map_update_interval: cada quant s'actualitza el mapa (s)
+    - xmax/xmin/ymax/ymin: límits del mapa en metres
+    - delta: resolució del mapa (m/cel·la)
+    - particles: nombre de partícules del filtre
+  -->
+  <node pkg="gmapping" type="slam_gmapping" name="turtlebot3_slam_gmapping"
+        output="screen">
+    
+    <!-- Eixos de referència -->
+    <param name="base_frame"  value="base_footprint"/>
+    <param name="odom_frame"  value="odom"/>
+    <param name="map_frame"   value="map"/>
+
+    <!-- Actualització del mapa -->
+    <param name="map_update_interval" value="2.0"/>
+
+    <!-- Mida màxima del mapa: una mica més gran que 10x10 m per seguretat -->
+    <param name="xmin" value="-6.0"/>
+    <param name="xmax" value="6.0"/>
+    <param name="ymin" value="-6.0"/>
+    <param name="ymax" value="6.0"/>
+
+    <!-- Resolució: 5 cm per cel·la (estàndard per a TurtleBot3) -->
+    <param name="delta" value="0.05"/>
+
+    <!-- Rang del làser -->
+    <param name="maxUrange" value="3.5"/>
+    <param name="maxRange"  value="5.0"/>
+
+    <!-- Partícules del filtre (més partícules = més precís però més lent) -->
+    <param name="particles" value="100"/>
+
+    <!-- Distància mínima de moviment per actualitzar el filtre -->
+    <param name="linearUpdate"  value="0.2"/>
+    <param name="angularUpdate" value="0.2"/>
+    <param name="temporalUpdate" value="0.5"/>
+
+    <!-- Paràmetres de qualitat del mapa -->
+    <param name="resampleThreshold" value="0.5"/>
+    <param name="iterations"        value="5"/>
+    <param name="lsigma"            value="0.075"/>
+    <param name="ogain"             value="3.0"/>
+    <param name="lskip"             value="0"/>
+
+    <!-- Paràmetres del model d'odometria -->
+    <param name="srr" value="0.1"/>
+    <param name="srt" value="0.2"/>
+    <param name="str" value="0.1"/>
+    <param name="stt" value="0.2"/>
+
+    <!-- Amplitud de l'escombrada del làser -->
+    <param name="llsamplerange"  value="0.01"/>
+    <param name="llsamplestep"   value="0.01"/>
+    <param name="lasamplerange"  value="0.005"/>
+    <param name="lasamplestep"   value="0.005"/>
+  </node>
+</launch>
