@@ -1,0 +1,16 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+build/
+devel/
+install/
+.catkin_tools/
+
+*.bag
+*.log
+*.pt
+*.onnx
+data/raw/
+data/images/
+data/labels/
