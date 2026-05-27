@@ -1,0 +1,8 @@
+train: ../images/train
+val: ../images/val
+names:
+  0: paper_cardboard
+  1: plastic_metal_carton
+  2: glass
+  3: organic
+  4: residual
