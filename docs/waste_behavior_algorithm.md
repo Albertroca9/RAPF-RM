@@ -38,6 +38,8 @@ TACO is used as the first dataset because it is annotated for litter in real-wor
 
 The conversion tool writes YOLO labels and a `data.yaml` template. Images, labels and trained weights are intentionally ignored by git.
 
+The concrete TACO-60 to five-bin mapping is stored in `waste_robot_behavior/config/taco_to_5_bins.csv`. The Python converter uses the same mapping through `TACO_CLASS_TO_CONTAINER`.
+
 ## Next Integration Step
 
 Replace `mock_robot_io_node.py` with adapters that:

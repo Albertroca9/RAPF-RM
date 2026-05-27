@@ -33,6 +33,7 @@ python3 -m waste_robot_behavior.dataset.taco_to_yolo \
 ```
 
 The generated YOLO labels use the class order from `config/yolo_data.yaml`.
+The TACO to project-bin mapping is explicit in `config/taco_to_5_bins.csv`.
 
 ## ROS Launch With Mocks
 
