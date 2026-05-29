@@ -44,6 +44,8 @@ python3 -m waste_robot_behavior.dataset.train_yolov8 \
 
 The trained model can then be used with `model_path:=/path/to/best.pt`.
 
+For Google Colab, use `notebooks/yolov8n_mendeley_colab.ipynb` from the repository root. It keeps the same four-class mapping and training parameters.
+
 ## TACO Dataset Conversion
 
 Download TACO annotations from the official dataset tooling, then run:
