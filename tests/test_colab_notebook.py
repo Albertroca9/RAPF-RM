@@ -19,6 +19,10 @@ class ColabNotebookTest(unittest.TestCase):
             "pip install -q ultralytics",
             "Mendeley dataset page",
             "data/mendeley_yolo_4bins",
+            "def prepare_mendeley_subset",
+            "def convert_mendeley_class_id",
+            "def find_images",
+            "def rewrite_label_rows",
             "paper",
             "plastic",
             "glass",
@@ -30,6 +34,17 @@ class ColabNotebookTest(unittest.TestCase):
         for fragment in required_fragments:
             with self.subTest(fragment=fragment):
                 self.assertIn(fragment, source)
+
+        forbidden_fragments = [
+            "git clone",
+            "sys.path.insert",
+            "waste_robot_behavior",
+            "REPO_URL",
+            "PROJECT_DIR",
+        ]
+        for fragment in forbidden_fragments:
+            with self.subTest(fragment=fragment):
+                self.assertNotIn(fragment, source)
 
 
 if __name__ == "__main__":
