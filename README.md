@@ -7,8 +7,12 @@ Proyecto de robótica móvil para un TurtleBot3 Waffle que actúa como camión d
 ```text
 RAPF-RM/
 +-- README.md
++-- data/
+|   +-- maps.zip
+|   +-- yolo_test.zip
 +-- docs/
 |   +-- lab_ros2_waffle_basura.md
+|   +-- yolo_waffle_ros1_noetic.txt
 +-- scripts/
     +-- setup_tb3_manipulation.sh
 ```
@@ -16,7 +20,9 @@ RAPF-RM/
 ## Contenido
 
 - `docs/lab_ros2_waffle_basura.md`: guía de laboratorio para preparar el entorno ROS2, conectar con el robot, probar la cámara y ejecutar la detección.
+- `docs/yolo_waffle_ros1_noetic.txt`: guía para probar YOLOv8n con la cámara del Waffle usando ROS1 Noetic.
 - `scripts/setup_tb3_manipulation.sh`: script de instalación para TurtleBot3 con manipulación en ROS Noetic. Se conserva como apoyo para la parte de manipulación, aunque el proyecto principal se orienta a ROS2.
+- `data/maps.zip` y `data/yolo_test.zip`: archivos auxiliares del proyecto recibidos desde el repositorio remoto.
 
 ## Uso recomendado en el laboratorio
 
