@@ -2,7 +2,7 @@
 
 ## Goal
 
-Detect waste, classify it into one of five container classes, estimate its 3D position with depth, and drive a high-level behavior state machine that can later be connected to `move_base` and OpenMANIPULATOR.
+Detect waste, classify it into one of four container classes, estimate its 3D position with depth, and drive a high-level behavior state machine that can later be connected to `move_base` and OpenMANIPULATOR.
 
 ## Runtime Flow
 
@@ -28,17 +28,44 @@ RGB image + depth + camera_info
 
 ## Dataset Strategy
 
-TACO is used as the first dataset because it is annotated for litter in real-world contexts. The project does not expose TACO's full taxonomy to the robot. Instead, TACO labels are collapsed into the five operational container classes:
+The first fine-tuning dataset is the Mendeley synthetic outdoor waste YOLO dataset, version 2:
 
-- `paper_cardboard`
-- `plastic_metal_carton`
+```text
+https://data.mendeley.com/datasets/2x69gjbcz6/2
+```
+
+It is already annotated in YOLO format and includes plastic, paper, cardboard, metal, glass, organic waste, battery waste, e-waste, cloth, and other waste. These labels are collapsed into the four operational container classes:
+
+- `paper`
+- `plastic`
 - `glass`
-- `organic`
 - `residual`
 
-The conversion tool writes YOLO labels and a `data.yaml` template. Images, labels and trained weights are intentionally ignored by git.
+Paper and cardboard map to `paper`. Plastic and metal map to `plastic`. Glass maps to `glass`. Organic waste and all remaining waste classes map to `residual`.
 
-The concrete TACO-60 to five-bin mapping is stored in `waste_robot_behavior/config/taco_to_5_bins.csv`. The Python converter uses the same mapping through `TACO_CLASS_TO_CONTAINER`.
+The legacy TACO conversion path is still available for later real-image expansion. Its labels are also collapsed into the same four classes through `waste_robot_behavior/config/taco_to_4_bins.csv`.
+
+The preparation tools write YOLO labels and a `data.yaml` template. Images, labels, training runs, and trained weights are intentionally ignored by git.
+
+## Fine-Tuning Commands
+
+After downloading and extracting the Mendeley dataset:
+
+```bash
+python3 -m waste_robot_behavior.dataset.mendeley_yolo \
+  /path/to/extracted_mendeley_dataset \
+  data/mendeley_yolo_4bins \
+  --sample-size 600
+
+python3 -m waste_robot_behavior.dataset.train_yolov8 \
+  data/mendeley_yolo_4bins/data.yaml
+```
+
+The expected best weights path is:
+
+```text
+runs/waste_yolov8/yolov8n_mendeley_4bins/weights/best.pt
+```
 
 ## Next Integration Step
 

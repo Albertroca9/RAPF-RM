@@ -11,6 +11,8 @@ install/
 *.log
 *.pt
 *.onnx
+runs/
 data/raw/
 data/images/
 data/labels/
+data/mendeley_yolo_4bins/

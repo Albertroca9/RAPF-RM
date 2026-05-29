@@ -10,13 +10,13 @@ class BehaviorStateMachineTest(unittest.TestCase):
         machine = WasteBehaviorStateMachine()
         far = DetectedObject(
             label="paper",
-            container="paper_cardboard",
+            container="paper",
             confidence=0.9,
             position=Position3D(x=1.0, y=0.0, z=2.0),
         )
         near = DetectedObject(
             label="plastic bottle",
-            container="plastic_metal_carton",
+            container="plastic",
             confidence=0.8,
             position=Position3D(x=0.2, y=0.0, z=0.8),
         )
@@ -52,7 +52,7 @@ class BehaviorStateMachineTest(unittest.TestCase):
         machine = WasteBehaviorStateMachine(approach_distance_m=0.45)
         trash = DetectedObject(
             label="banana peel",
-            container="organic",
+            container="residual",
             confidence=0.9,
             position=Position3D(x=0.0, y=0.0, z=0.4),
         )
@@ -64,7 +64,7 @@ class BehaviorStateMachineTest(unittest.TestCase):
         decision = machine.handle(RobotEvent(gripper_has_object=True))
         self.assertEqual(decision.state, RobotState.NAVIGATE_TO_BIN)
         self.assertEqual(decision.command, "go_to_bin")
-        self.assertEqual(decision.target_bin, "organic")
+        self.assertEqual(decision.target_bin, "residual")
 
         decision = machine.handle(RobotEvent(at_bin=True))
         self.assertEqual(decision.state, RobotState.DROP)

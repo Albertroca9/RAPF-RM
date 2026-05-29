@@ -9,14 +9,13 @@ from waste_robot_behavior.taxonomy import (
 
 
 class TaxonomyTest(unittest.TestCase):
-    def test_container_classes_are_the_project_five_bins(self):
+    def test_container_classes_are_the_project_four_bins(self):
         self.assertEqual(
             CONTAINER_CLASSES,
             (
-                "paper_cardboard",
-                "plastic_metal_carton",
+                "paper",
+                "plastic",
                 "glass",
-                "organic",
                 "residual",
             ),
         )
@@ -24,13 +23,13 @@ class TaxonomyTest(unittest.TestCase):
     def test_maps_taco_classes_to_project_bins(self):
         mapper = DetectionClassMapper.default()
         cases = [
-            ("Cardboard", "paper_cardboard"),
-            ("paper", "paper_cardboard"),
-            ("Plastic bottle", "plastic_metal_carton"),
-            ("Metal bottle cap", "plastic_metal_carton"),
-            ("Drink carton", "plastic_metal_carton"),
+            ("Cardboard", "paper"),
+            ("paper", "paper"),
+            ("Plastic bottle", "plastic"),
+            ("Metal bottle cap", "plastic"),
+            ("Drink carton", "plastic"),
             ("Glass bottle", "glass"),
-            ("Food waste", "organic"),
+            ("Food waste", "residual"),
             ("Cigarette", "residual"),
         ]
 
@@ -109,16 +108,16 @@ class TaxonomyTest(unittest.TestCase):
         self.assertEqual(set(TACO_CLASS_TO_CONTAINER), expected_classes)
         self.assertTrue(set(TACO_CLASS_TO_CONTAINER.values()).issubset(set(CONTAINER_CLASSES)))
 
-    def test_specific_taco_60_classes_map_to_five_bins(self):
+    def test_specific_taco_60_classes_map_to_four_bins(self):
         mapper = DetectionClassMapper.default()
         cases = [
-            ("Clear plastic bottle", "plastic_metal_carton"),
-            ("Food Can", "plastic_metal_carton"),
-            ("Aerosol", "plastic_metal_carton"),
-            ("Corrugated carton", "paper_cardboard"),
-            ("Pizza box", "paper_cardboard"),
+            ("Clear plastic bottle", "plastic"),
+            ("Food Can", "plastic"),
+            ("Aerosol", "plastic"),
+            ("Corrugated carton", "paper"),
+            ("Pizza box", "paper"),
             ("Glass jar", "glass"),
-            ("Banana peel", "organic"),
+            ("Banana peel", "residual"),
             ("Battery", "residual"),
             ("Shoe", "residual"),
         ]
