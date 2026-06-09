@@ -145,7 +145,16 @@ class TaxonomyTest(unittest.TestCase):
         cases = [
             ("book", "paper"),
             ("bottle", "plastic"),
+            ("cup", "plastic"),
+            ("bowl", "plastic"),
+            ("fork", "plastic"),
+            ("knife", "plastic"),
+            ("spoon", "plastic"),
+            ("toothbrush", "plastic"),
+            ("frisbee", "plastic"),
+            ("sports ball", "plastic"),
             ("wine glass", "glass"),
+            ("vase", "glass"),
             ("banana", "residual"),
             ("apple", "residual"),
             ("pizza", "residual"),
@@ -158,7 +167,7 @@ class TaxonomyTest(unittest.TestCase):
     def test_ambiguous_coco_classes_are_not_pickup_targets(self):
         mapper = DetectionClassMapper.default()
 
-        for label in ("cup", "bowl", "vase", "cell phone"):
+        for label in ("cell phone", "remote", "laptop"):
             with self.subTest(label=label):
                 self.assertIsNone(mapper.map_coco_class(label))
                 self.assertIsNone(mapper.map_runtime_container(label))
