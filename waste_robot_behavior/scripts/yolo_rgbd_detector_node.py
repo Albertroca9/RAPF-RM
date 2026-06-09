@@ -10,7 +10,7 @@ from ultralytics import YOLO
 
 from waste_robot_behavior.detections import DetectedObject
 from waste_robot_behavior.geometry import BoundingBox, CameraIntrinsics, DepthEstimator
-from waste_robot_behavior.taxonomy import CONTAINER_CLASSES, DetectionClassMapper, SafetyClass
+from waste_robot_behavior.taxonomy import DetectionClassMapper, SafetyClass
 
 
 class YoloRgbdDetectorNode:
@@ -58,10 +58,8 @@ class YoloRgbdDetectorNode:
         self.publisher.publish(String(data=json.dumps(payload)))
 
     def _serialize_detection(self, label, confidence, position):
-        normalized = label.lower()
-        is_known_waste = any(alias in normalized for alias in self.mapper.waste_aliases)
-        if is_known_waste or normalized in CONTAINER_CLASSES:
-            container = label if normalized in CONTAINER_CLASSES else self.mapper.map_waste_class(label)
+        container = self.mapper.map_runtime_container(label)
+        if container is not None:
             detection = DetectedObject(label=label, confidence=confidence, container=container, position=position)
         else:
             detection = DetectedObject(

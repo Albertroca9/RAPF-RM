@@ -73,6 +73,23 @@ TACO_CLASS_TO_CONTAINER = {
 }
 
 
+COCO_CLASS_TO_CONTAINER = {
+    "book": "paper",
+    "bottle": "plastic",
+    "wine glass": "glass",
+    "apple": "residual",
+    "banana": "residual",
+    "broccoli": "residual",
+    "cake": "residual",
+    "carrot": "residual",
+    "donut": "residual",
+    "hot dog": "residual",
+    "orange": "residual",
+    "pizza": "residual",
+    "sandwich": "residual",
+}
+
+
 class SafetyClass(str, Enum):
     PERSON = "person"
     OBSTACLE = "obstacle"
@@ -144,6 +161,15 @@ class DetectionClassMapper:
             if key in normalized:
                 return container
         return "residual"
+
+    def map_coco_class(self, label: str) -> str | None:
+        return COCO_CLASS_TO_CONTAINER.get(_normalize(label))
+
+    def map_runtime_container(self, label: str) -> str | None:
+        normalized = _normalize(label)
+        if normalized in CONTAINER_CLASSES:
+            return normalized
+        return self.map_coco_class(label)
 
     def map_non_waste_label(self, label: str) -> SafetyClass:
         normalized = _normalize(label)

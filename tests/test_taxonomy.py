@@ -1,6 +1,7 @@
 import unittest
 
 from waste_robot_behavior.taxonomy import (
+    COCO_CLASS_TO_CONTAINER,
     CONTAINER_CLASSES,
     DetectionClassMapper,
     SafetyClass,
@@ -138,6 +139,32 @@ class TaxonomyTest(unittest.TestCase):
         for label, expected in cases:
             with self.subTest(label=label):
                 self.assertEqual(mapper.map_non_waste_label(label), expected)
+
+    def test_maps_conservative_coco_classes_to_project_bins(self):
+        mapper = DetectionClassMapper.default()
+        cases = [
+            ("book", "paper"),
+            ("bottle", "plastic"),
+            ("wine glass", "glass"),
+            ("banana", "residual"),
+            ("apple", "residual"),
+            ("pizza", "residual"),
+        ]
+
+        for label, expected in cases:
+            with self.subTest(label=label):
+                self.assertEqual(mapper.map_coco_class(label), expected)
+
+    def test_ambiguous_coco_classes_are_not_pickup_targets(self):
+        mapper = DetectionClassMapper.default()
+
+        for label in ("cup", "bowl", "vase", "cell phone"):
+            with self.subTest(label=label):
+                self.assertIsNone(mapper.map_coco_class(label))
+                self.assertIsNone(mapper.map_runtime_container(label))
+
+    def test_explicit_coco_mapping_is_subset_of_project_bins(self):
+        self.assertTrue(set(COCO_CLASS_TO_CONTAINER.values()).issubset(set(CONTAINER_CLASSES)))
 
 
 if __name__ == "__main__":

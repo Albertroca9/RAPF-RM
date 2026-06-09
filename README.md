@@ -22,38 +22,28 @@ RAPF-RM/
 
 - `setup_tb3_manipulation.sh`: instalación de ROS Noetic, TurtleBot3 y OpenMANIPULATOR-X en un PC remoto Ubuntu 20.04.
 - `README_YOLO_WAFFLE_ROS1_NOETIC.txt`: guía de prueba inicial YOLOv8n con la cámara del Waffle usando ROS1 Noetic.
-- `waste_robot_behavior/`: paquete ROS Python para detección RGB-D, clasificación, fine-tuning y comportamiento de residuos.
-- `yolo_test/`: paquete ROS de prueba para ejecutar YOLO sobre `/camera/image`, con parámetro `model_path` para cargar `best.pt`.
+- `waste_robot_behavior/`: paquete ROS Python para detección RGB-D, mapeo de clases YOLO, clasificación y comportamiento de residuos.
+- `yolo_test/`: paquete ROS de prueba para ejecutar YOLOv8n sobre `/camera/image` y visualizar el mapeo COCO a contenedores.
 - `docs/waste_behavior_algorithm.md`: diseño operativo del algoritmo YOLO RGB-D.
+
+## Runtime YOLOv8n
+
+La lógica principal actual usa `yolov8n.pt` normal y mapea clases COCO a los contenedores del proyecto:
+
+- `book` -> `paper`
+- `bottle` -> `plastic`
+- `wine glass` -> `glass`
+- alimentos COCO como `banana`, `apple` o `pizza` -> `residual`
+
+Las clases ambiguas no se recogen como basura. `person` sigue siendo una clase de seguridad.
+
+```bash
+rosrun yolo_test yolo_node.py _image_topic:=/camera/image _confidence_threshold:=0.25
+```
 
 ## Fine-tuning YOLOv8n
 
-El primer dataset elegido es Mendeley "A synthetic outdoor waste image dataset with YOLO-format annotations for object detection":
-
-```text
-https://data.mendeley.com/datasets/2x69gjbcz6/2
-```
-
-Tras descargarlo y extraerlo:
-
-```bash
-python3 -m waste_robot_behavior.dataset.mendeley_yolo /ruta/dataset data/mendeley_yolo_4bins --sample-size 600
-python3 -m waste_robot_behavior.dataset.train_yolov8 data/mendeley_yolo_4bins/data.yaml
-```
-
-Tambien hay una version autocontenida para Google Colab en `notebooks/yolov8n_mendeley_colab.ipynb`.
-
-Las clases entrenadas son `paper`, `plastic`, `glass` y `residual`.
-
-## Uso del modelo entrenado
-
-Después de descargar `best.pt` desde Colab al PC donde ejecutas ROS:
-
-```bash
-rosrun yolo_test yolo_node.py _image_topic:=/camera/image _model_path:=/ruta/a/best.pt
-```
-
-Si no pasas `_model_path`, el nodo usa `yolov8n.pt`.
+El pipeline Mendeley/Colab queda conservado como histórico para retomar entrenamiento si hace falta, pero no es la vía principal de runtime.
 
 ## Verificación Local
 

@@ -2,7 +2,7 @@
 
 ## Goal
 
-Detect waste, classify it into one of four container classes, estimate its 3D position with depth, and drive a high-level behavior state machine that can later be connected to `move_base` and OpenMANIPULATOR.
+Detect objects with standard YOLOv8n, map selected COCO classes into one of four container classes, estimate 3D position with depth, and drive a high-level behavior state machine that can later be connected to `move_base` and OpenMANIPULATOR.
 
 ## Runtime Flow
 
@@ -26,7 +26,18 @@ RGB image + depth + camera_info
 - Unknown non-waste objects are not pickup targets.
 - Detections without valid depth are not actionable, because the pinza needs a reachable 3D target.
 
-## Dataset Strategy
+## Runtime Class Mapping
+
+The current runtime path uses standard `yolov8n.pt`, not the fine-tuned model. Only conservative COCO classes become pickup targets:
+
+- `book` -> `paper`
+- `bottle` -> `plastic`
+- `wine glass` -> `glass`
+- food classes such as `banana`, `apple`, `sandwich`, `pizza`, `orange`, `broccoli`, `carrot`, `hot dog`, `donut`, and `cake` -> `residual`
+
+Ambiguous COCO classes are not pickup targets. `person` remains a safety class.
+
+## Historical Fine-Tuning Strategy
 
 The first fine-tuning dataset is the Mendeley synthetic outdoor waste YOLO dataset, version 2:
 
@@ -61,7 +72,7 @@ python3 -m waste_robot_behavior.dataset.train_yolov8 \
   data/mendeley_yolo_4bins/data.yaml
 ```
 
-The expected best weights path is:
+The expected best weights path, if this historical path is used again, is:
 
 ```text
 runs/waste_yolov8/yolov8n_mendeley_4bins/weights/best.pt
